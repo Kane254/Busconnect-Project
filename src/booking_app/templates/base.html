@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bus Booking{% endblock %}</title>
+    <style>
+        /* Simple inline CSS for basic styling */
+        body { font-family: sans-serif; margin: 0; padding-top: 60px; background-color: #f4f4f4; }
+        .navbar { background-color: #333; color: white; padding: 15px; position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: white; text-decoration: none; margin: 0 15px; }
+        .container { max-width: 960px; margin: 20px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .message { padding: 10px; margin-bottom: 15px; border-radius: 5px; }
+        .message.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .message.info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        form ul { list-style: none; padding: 0; }
+        form li { margin-bottom: 10px; }
+        form label { display: block; margin-bottom: 5px; font-weight: bold; }
+        form input[type="text"],
+        form input[type="password"],
+        form input[type="email"],
+        form input[type="number"],
+        form input[type="date"],
+        form select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        form button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        form button:hover { background-color: #0056b3; }
+        .errorlist { color: red; font-size: 0.9em; margin-top: 5px; padding-left: 0; list-style: none; }
+        .footer { text-align: center; padding: 20px; margin-top: 40px; background-color: #eee; }
+        .trip-card, .booking-card, .payment-details { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; background-color: #fff; }
+        .trip-card h3, .booking-card h3, .payment-details h3 { color: #007bff; margin-top: 0; }
+        .trip-card p, .booking-card p, .payment-details p { margin-bottom: 5px; }
+        .trip-card .actions, .booking-card .actions { text-align: right; }
+        .btn { display: inline-block; padding: 8px 12px; text-decoration: none; border-radius: 4px; cursor: pointer; border: none; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-primary:hover { background-color: #0056b3; }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-success:hover { background-color: #218838; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        .text-success { color: #28a745; font-weight: bold; }
+        .text-danger { color: #dc3545; font-weight: bold; }
+        .text-info { color: #17a2b8; font-weight: bold; }
+        .text-warning { color: #ffc107; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <a href="{% url 'home' %}">Bus Booking</a>
+            <a href="{% url 'trip_list' %}">Find Trips</a>
+        </div>
+        <div>
+            {% if user.is_authenticated %}
+                <span>Hello, {{ user.username }}!</span>
+                <a href="{% url 'my_bookings' %}">My Bookings</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'signup' %}">Sign Up</a> {# Reminder: signup might need custom view or django-allauth #}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    <div class="footer">
+        <p>&copy; {{ "now"|date:"Y" }} Simple Bus Booking. All rights reserved.</p>
+    </div>
+</body>
+</html>

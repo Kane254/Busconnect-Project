@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Available Trips{% endblock %}
+
+{% block content %}
+    <h1>Available Bus Trips</h1>
+
+    <h2>Refine Your Search</h2>
+    <form method="get" action="{% url 'trip_list' %}">
+        {{ search_form.as_p }}
+        <button type="submit">Search</button>
+        <a href="{% url 'trip_list' %}" class="btn btn-secondary">Clear Filters</a>
+    </form>
+
+    <hr>
+
+    {% if trips %}
+        {% for trip in trips %}
+            <div class="trip-card">
+                <h3>{{ trip.route.departure_stop.name }} to {{ trip.route.arrival_stop.name }}</h3>
+                <p><strong>Date:</strong> {{ trip.trip_date|date:"F d, Y" }}</p>
+                <p><strong>Departure Time:</strong> {{ trip.departure_time|time:"h:i A" }}</p>
+                <p><strong>Bus:</strong> {{ trip.bus.bus_number }} (Capacity: {{ trip.bus.capacity }})</p>
+                <p class="text-info"><strong>Available Seats:</strong> {{ trip.available_seats }}</p>
+                <p class="text-success"><strong>Price:</strong> Ksh {{ trip.route.price|floatformat:2 }}</p>
+                <div class="actions">
+                    {% if trip.available_seats > 0 %}
+                        <a href="{% url 'trip_detail' trip.pk %}" class="btn btn-success">Book Now</a>
+                    {% else %}
+                        <span class="text-danger">Sold Out</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No trips found matching your criteria. Try adjusting your search.</p>
+    {% endif %}
+{% endblock %}

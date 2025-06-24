@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+    <h1>My Bookings</h1>
+
+    {% if bookings %}
+        {% for booking in bookings %}
+            <div class="booking-card">
+                <h3>Booking ID: {{ booking.id }}</h3>
+                <p><strong>Trip:</strong> {{ booking.trip.route.departure_stop.name }} to {{ booking.trip.route.arrival_stop.name }}</p>
+                <p><strong>Date & Time:</strong> {{ booking.trip.trip_date|date:"F d, Y" }} at {{ booking.trip.departure_time|time:"h:i A" }}</p>
+                <p><strong>Seats Booked:</strong> {{ booking.num_seats }}</p>
+                <p class="text-success"><strong>Total Price:</strong> Ksh {{ booking.total_price|floatformat:2 }}</p>
+                <p><strong>Booking Date:</strong> {{ booking.booking_date|date:"F d, Y H:i" }}</p>
+                <p><strong>Status:</strong>
+                    {% if booking.status == 'CONFIRMED' %}
+                        <span class="text-success">{{ booking.get_status_display }}</span>
+                    {% elif booking.status == 'PENDING' %}
+                        <span class="text-warning">{{ booking.get_status_display }}</span>
+                    {% elif booking.status == 'FAILED_PAYMENT' or booking.status == 'CANCELLED' %}
+                        <span class="text-danger">{{ booking.get_status_display }}</span>
+                    {% else %}
+                        <span>{{ booking.get_status_display }}</span>
+                    {% endif %}
+                </p>
+                <div class="actions">
+                    {% if booking.status == 'PENDING' %}
+                        <a href="{% url 'initiate_payment' booking.id %}" class="btn btn-primary">Complete Payment</a>
+                    {% elif booking.status == 'CONFIRMED' %}
+                        <form method="post" action="{% url 'cancel_booking' booking.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel Booking</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You have no bookings yet. <a href="{% url 'trip_list' %}">Find a trip!</a></p>
+    {% endif %}
+{% endblock %}

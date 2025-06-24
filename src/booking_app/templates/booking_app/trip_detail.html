@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Trip Details - {{ trip.route.departure_stop.name }} to {{ trip.route.arrival_stop.name }}{% endblock %}
+
+{% block content %}
+    <h1>Trip Details</h1>
+
+    <div class="trip-card">
+        <h3>{{ trip.route.departure_stop.name }} to {{ trip.route.arrival_stop.name }}</h3>
+        <p><strong>Date:</strong> {{ trip.trip_date|date:"F d, Y" }}</p>
+        <p><strong>Departure Time:</strong> {{ trip.departure_time|time:"h:i A" }}</p>
+        <p><strong>Bus:</strong> {{ trip.bus.bus_number }} ({{ trip.bus.capacity }} seats)</p>
+        <p class="text-info"><strong>Available Seats:</strong> {{ trip.available_seats }}</p>
+        <p class="text-success"><strong>Price per seat:</strong> Ksh {{ trip.route.price|floatformat:2 }}</p>
+    </div>
+
+    <h2>Book Your Seat(s)</h2>
+    {% if trip.available_seats > 0 %}
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'create_booking' trip.pk %}"> {# CHANGED ACTION URL #}
+                {% csrf_token %}
+                {{ booking_form.as_p }}
+                <button type="submit" class="btn btn-success">Proceed to Payment</button>
+            </form>
+        {% else %}
+            <p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to book seats.</p>
+        {% endif %}
+    {% else %}
+        <p class="text-danger">This trip is currently sold out.</p>
+    {% endif %}
+
+    <p><a href="{% url 'trip_list' %}" class="btn btn-secondary">Back to Trip List</a></p>
+{% endblock %}

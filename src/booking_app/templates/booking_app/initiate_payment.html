@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Initiate Payment{% endblock %}
+
+{% block content %}
+    <h1>Initiate Payment for Booking #{{ booking.id }}</h1>
+
+    <div class="payment-details">
+        <h3>Booking Summary</h3>
+        <p><strong>Trip:</strong> {{ booking.trip.route.departure_stop.name }} to {{ booking.trip.route.arrival_stop.name }}</p>
+        <p><strong>Date & Time:</strong> {{ booking.trip.trip_date|date:"F d, Y" }} at {{ booking.trip.departure_time|time:"h:i A" }}</p>
+        <p><strong>Seats Booked:</strong> {{ booking.num_seats }}</p>
+        <p class="text-success"><strong>Total Amount Due:</strong> Ksh {{ booking.total_price|floatformat:2 }}</p>
+        <p><strong>Current Status:</strong> <span class="text-warning">{{ booking.status }}</span></p>
+    </div>
+
+    <h2>Payment Details</h2>
+    <p>Please click the button below to simulate payment for this booking.</p>
+    <p><strong>(Note: This is a dummy payment process for demonstration purposes.)</strong></p>
+
+    <form method="post" action="{% url 'process_dummy_payment' booking.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Simulate Payment</button>
+    </form>
+
+    <p><a href="{% url 'my_bookings' %}" class="btn btn-secondary">Go to My Bookings</a></p>
+{% endblock %}
