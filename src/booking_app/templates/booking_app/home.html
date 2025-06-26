@@ -3,6 +3,44 @@
 {% block title %}Welcome to Bus Booking{% endblock %}
 
 {% block content %}
+
+ <style>
+        body {
+            background-image: url('https://t4.ftcdn.net/jpg/02/69/47/51/360_F_269475198_k41qahrZ1j4RK1sarncMiFHpcmE2qllQ.jpg');
+            background-size: cover; /* Ensures the image covers the entire background */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-attachment: fixed; /* Keeps the background fixed when scrolling */
+          
+            text-shadow: 1px 1px 3px rgba(37, 5, 5, 0.7); /* Add text shadow for readability */
+        }
+        /* You might need to adjust other elements to be more visible on a background image */
+        .navbar, .container, .footer {
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background for content */
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .navbar {
+            background-color: rgba(51, 51, 51, 0.8); /* Slightly less transparent for navbar */
+        }
+        h1, h2, h3, p, a {
+            color: #fff; /* Ensure all text is white */
+        }
+        .btn {
+            color: #fff !important; /* Ensure button text is white */
+        }
+        /* Adjust form input styles for better visibility on dark background */
+        form input[type="text"],
+        form input[type="password"],
+        form input[type="email"],
+        form input[type="number"],
+        form input[type="date"],
+        form select {
+           
+            color: #333; /* Dark text for inputs */
+        }
+    </style>
     <h1>Welcome to the Simple Bus Booking System!</h1>
     <p>Find and book your bus tickets easily.</p>
 
